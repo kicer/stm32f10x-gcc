@@ -18,6 +18,7 @@ STM32_LIB_INCS += $(STM32_LIB_DIR)/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10
 
 STM32_STARTUP = $(patsubst %.s,%.o,$(wildcard $(WORKSPACE_DIR)/startup/*.s))
 
+EXEC = template
 PROJECT_SRCS = $(wildcard $(WORKSPACE_DIR)/src/*.c)
 PROJECT_OBJS = $(patsubst %.c,%.o,$(PROJECT_SRCS))
 
@@ -25,7 +26,7 @@ CFLAGS += -mthumb -mcpu=cortex-m3 -mfix-cortex-m3-ldrd
 CFLAGS += -DSTM32F10X_HD -DHSE_VALUE=8000000 -DUSE_STDPERIPH_DRIVER
 CFLAGS += $(addprefix -I,$(STM32_LIB_INCS)) -I./inc
 
-LDFLAGS += -T"$(WORKSPACE_DIR)/stm32_flash.ld" -mthumb -mcpu=cortex-m3 -mfix-cortex-m3-ldrd -Wl,-Map=linker.map -Wl,-cref -Wl,--gc-sections
+LDFLAGS += -T"$(WORKSPACE_DIR)/stm32_flash.ld" -mthumb -mcpu=cortex-m3 -mfix-cortex-m3-ldrd -Wl,-Map=$(EXEC).map -Wl,-cref -Wl,--gc-sections
 
 ifeq ($(DEBUG), 1)
 	Q = 
@@ -47,31 +48,31 @@ lib:
 standlone: $(EXEC).elf
 	
 $(EXEC).elf: $(STM32_LIB_OBJS) $(PROJECT_OBJS) $(STM32_STARTUP)
-	$(LD) $(LDFLAGS) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^
 
 clean:
 	$(Q) $(RM) -v $(STM32_LIB_OBJS)
+	$(Q) $(RM) -v $(PROJECT_OBJS)
+	$(Q) $(RM) -v $(STM32_STARTUP)
+	$(Q) $(RM) -v $(EXEC).elf $(EXEC).bin $(EXEC).hex $(EXEC).map
 
-help:
-	$(Q) echo "$(STM32_LIB_INCS)"
-	$(Q) echo "$(STM32_LIB_OBJS)"
 
 %.bin: %.elf
 	$(Q) printf "[OBJC] $< --> $@"
 	$(Q) $(OBJCOPY) -S -O binary $@ $<
-	$(Q) printf "\t\t... [ok]"
+	$(Q) printf "\t\t... [ok]\n"
 
 %.hex: %.elf
 	$(Q) printf "[OBJC] $< --> $@"
 	$(Q) $(OBJCOPY) -S -O ihex $@ $<
-	$(Q) printf "\t\t... [ok]"
+	$(Q) printf "\t\t... [ok]\n"
 
 %.o: %.c
 	$(Q) printf "[GCC ] $@"
 	$(Q) $(CC) $(CFLAGS) -o $@ -c $<
-	$(Q) printf "\t\t... [ok]"
+	$(Q) printf "\t\t... [ok]\n"
 
 %.o: %.s
 	$(Q) printf "[GCC ] $@"
 	$(Q) $(CC) $(CFLAGS) -o $@ -c $<
-	$(Q) printf "\t\t... [ok]"
+	$(Q) printf "\t\t... [ok]\n"
