@@ -1,6 +1,9 @@
 MAKEFILE_COMMON = $(abspath ./makefile.common)
 include $(MAKEFILE_COMMON)
 
+DEVICE ?= STM32F10X_HD
+OSC ?= 8000000
+
 WORKSPACE_DIR = $(abspath ./)
 STM32_LIB_DIR = $(abspath ../STM32F10x_StdPeriph_Lib_V3.5.0/)
 
@@ -16,9 +19,10 @@ STM32_LIB_INCS += $(STM32_LIB_DIR)/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10
 STM32_LIB_NAME = kstm32
 STM32_LIB_FILE = $(WORKSPACE_DIR)/lib/lib$(STM32_LIB_NAME).a
 
-STM32_STARTUP_OBJ = $(patsubst %.s,%.o,$(wildcard $(WORKSPACE_DIR)/startup/*.s))
+STM32_STARTUP_OBJ = $(patsubst %.S,%.o,$(wildcard $(WORKSPACE_DIR)/startup/*.S))
+STM32_STARTUP_OBJ += $(patsubst %.s,%.o,$(wildcard $(WORKSPACE_DIR)/startup/*.s))
 
-CFLAGS += -DSTM32F10X_HD -DHSE_VALUE=8000000
+CFLAGS += -D$(DEVICE) -DHSE_VALUE=$(OSC)
 CFLAGS += $(addprefix -I,$(STM32_LIB_INCS)) -I$(WORKSPACE_DIR)/inc
 
 LDFLAGS += -T"$(WORKSPACE_DIR)/stm32_flash.ld"
@@ -32,7 +36,7 @@ all: project
 
 check:
 ifndef PROJECT
-	$(error "Usage: make PROJECT=<name>")
+	$(error "Usage: make PROJECT=<app>")
 endif
 
 project: check lib

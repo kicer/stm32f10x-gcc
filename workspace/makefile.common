@@ -4,6 +4,7 @@ CC = $(CROSS)gcc
 OBJCOPY = $(CROSS)objcopy
 
 CFLAGS += -mthumb -mcpu=cortex-m3 -mfix-cortex-m3-ldrd -Os -Wall -MD
+CFLAGS += -ffunction-sections -fdata-sections -fno-exceptions
 CFLAGS += -DUSE_STDPERIPH_DRIVER
 
 LDFLAGS += -mthumb -mcpu=cortex-m3 -mfix-cortex-m3-ldrd -Wl,-cref -Wl,--gc-sections
@@ -35,5 +36,9 @@ endif
 	$(Q) $(CC) $(CFLAGS) -o $@ -c $<
 
 %.o: %.s
+	$(P) printf "[\033[032m CC \033[0m] $@\n"
+	$(Q) $(CC) $(CFLAGS) -o $@ -c $<
+
+%.o: %.S
 	$(P) printf "[\033[032m CC \033[0m] $@\n"
 	$(Q) $(CC) $(CFLAGS) -o $@ -c $<
