@@ -1,0 +1,39 @@
+CROSS ?= /opt/gcc-arm-none-eabi-4_8-2014q1/bin/arm-none-eabi-
+AR = $(CROSS)ar
+CC = $(CROSS)gcc
+OBJCOPY = $(CROSS)objcopy
+
+CFLAGS += -mthumb -mcpu=cortex-m3 -mfix-cortex-m3-ldrd
+CFLAGS += -DUSE_STDPERIPH_DRIVER
+
+LDFLAGS += -mthumb -mcpu=cortex-m3 -mfix-cortex-m3-ldrd -Wl,-cref -Wl,--gc-sections
+
+ARFLAG = cr
+
+ifeq ($(DEBUG), 1)
+	Q = 
+	P = @ \#
+else
+	Q = @
+	P = @
+endif
+
+%.bin: %.elf
+	$(P) printf "[\033[032mOBJC\033[0m] $< --> $@\n"
+	$(Q) $(OBJCOPY) -S -O binary $< $@
+
+%.hex: %.elf
+	$(P) printf "[\033[032mOBJC\033[0m] $< --> $@\n"
+	$(Q) $(OBJCOPY) -S -O ihex $< $@
+
+%.elf: $(OBJS)
+	$(P) printf "[\033[032m LD \033[0m] --> $@\n"
+	$(Q) $(CC) $(LDFLAGS) $(OBJS) $(LINK_LIB_FLAG) -o $@
+
+%.o: %.c
+	$(P) printf "[\033[032m CC \033[0m] $@\n"
+	$(Q) $(CC) $(CFLAGS) -o $@ -c $<
+
+%.o: %.s
+	$(P) printf "[\033[032m CC \033[0m] $@\n"
+	$(Q) $(CC) $(CFLAGS) -o $@ -c $<
