@@ -24,7 +24,7 @@ CFLAGS += $(addprefix -I,$(STM32_LIB_INCS)) -I$(WORKSPACE_DIR)/inc
 LDFLAGS += -T"$(WORKSPACE_DIR)/stm32_flash.ld"
 LDFLAGS += -L$(WORKSPACE_DIR)/lib
 
-LINK_LIB_FLAG = -l$(STM32_LIB_NAME)
+LINK_LIB_FLAGS = -l$(STM32_LIB_NAME)
 
 export
 
