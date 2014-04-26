@@ -1,16 +1,15 @@
-#ifdef STM32F10X_MD
 /**
   ******************************************************************************
-  * @file      startup_stm32f10x_md.s
+  * @file      startup_stm32f10x_ld.s
   * @author    MCD Application Team
   * @version   V3.5.0
   * @date      11-March-2011
-  * @brief     STM32F10x Medium Density Devices vector table for Atollic toolchain.
+  * @brief     STM32F10x Low Density Devices vector table for Atollic toolchain.
   *            This module performs:
   *                - Set the initial SP
   *                - Set the initial PC == Reset_Handler,
-  *                - Set the vector table entries with the exceptions ISR address
-  *                - Configure the clock system
+  *                - Set the vector table entries with the exceptions ISR address.
+  *                - Configure the clock system 
   *                - Branches to main in the C library (which eventually
   *                  calls main()).
   *            After Reset the Cortex-M3 processor is in Thread mode,
@@ -93,9 +92,9 @@ LoopFillZerobss:
 	bcc	FillZerobss
 
 /* Call the clock system intitialization function.*/
-    bl  SystemInit
+  bl  SystemInit
 /* Call static constructors */
-    bl __libc_init_array
+  bl __libc_init_array
 /* Call the application's entry point.*/
 	bl	main
 	bx	lr
@@ -169,21 +168,21 @@ g_pfnVectors:
 	.word	EXTI9_5_IRQHandler
 	.word	TIM1_BRK_IRQHandler
 	.word	TIM1_UP_IRQHandler
-	.word	TIM1_TRG_COM_IRQHandler
-	.word	TIM1_CC_IRQHandler
-	.word	TIM2_IRQHandler
-	.word	TIM3_IRQHandler
-	.word	TIM4_IRQHandler
-	.word	I2C1_EV_IRQHandler
-	.word	I2C1_ER_IRQHandler
-	.word	I2C2_EV_IRQHandler
-	.word	I2C2_ER_IRQHandler
-	.word	SPI1_IRQHandler
-	.word	SPI2_IRQHandler
-	.word	USART1_IRQHandler
-	.word	USART2_IRQHandler
-	.word	USART3_IRQHandler
-	.word	EXTI15_10_IRQHandler
+  .word TIM1_TRG_COM_IRQHandler
+  .word TIM1_CC_IRQHandler
+  .word TIM2_IRQHandler
+  .word TIM3_IRQHandler
+  .word 0
+  .word I2C1_EV_IRQHandler
+  .word I2C1_ER_IRQHandler
+  .word 0
+  .word 0
+  .word SPI1_IRQHandler
+  .word 0
+  .word USART1_IRQHandler
+  .word USART2_IRQHandler
+  .word 0
+  .word EXTI15_10_IRQHandler
 	.word	RTCAlarm_IRQHandler
 	.word	USBWakeUp_IRQHandler
   .word	0
@@ -193,8 +192,8 @@ g_pfnVectors:
 	.word	0
 	.word	0
 	.word	0
-	.word	BootRAM          /* @0x108. This is for boot in RAM mode for
-                            STM32F10x Medium Density devices. */
+	.word	BootRAM        /* @0x108. This is for boot in RAM mode for
+                          STM32F10x Low Density devices.*/
 
 /*******************************************************************************
 *
@@ -321,35 +320,20 @@ g_pfnVectors:
 	.weak	TIM3_IRQHandler
 	.thumb_set TIM3_IRQHandler,Default_Handler
 
-	.weak	TIM4_IRQHandler
-	.thumb_set TIM4_IRQHandler,Default_Handler
-
 	.weak	I2C1_EV_IRQHandler
 	.thumb_set I2C1_EV_IRQHandler,Default_Handler
 
 	.weak	I2C1_ER_IRQHandler
 	.thumb_set I2C1_ER_IRQHandler,Default_Handler
 
-	.weak	I2C2_EV_IRQHandler
-	.thumb_set I2C2_EV_IRQHandler,Default_Handler
-
-	.weak	I2C2_ER_IRQHandler
-	.thumb_set I2C2_ER_IRQHandler,Default_Handler
-
 	.weak	SPI1_IRQHandler
 	.thumb_set SPI1_IRQHandler,Default_Handler
-
-	.weak	SPI2_IRQHandler
-	.thumb_set SPI2_IRQHandler,Default_Handler
 
 	.weak	USART1_IRQHandler
 	.thumb_set USART1_IRQHandler,Default_Handler
 
 	.weak	USART2_IRQHandler
 	.thumb_set USART2_IRQHandler,Default_Handler
-
-	.weak	USART3_IRQHandler
-	.thumb_set USART3_IRQHandler,Default_Handler
 
 	.weak	EXTI15_10_IRQHandler
 	.thumb_set EXTI15_10_IRQHandler,Default_Handler
@@ -361,4 +345,3 @@ g_pfnVectors:
 	.thumb_set USBWakeUp_IRQHandler,Default_Handler
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
-#endif /* STM32F10X_MD */

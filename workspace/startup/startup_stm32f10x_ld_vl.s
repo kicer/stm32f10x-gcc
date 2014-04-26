@@ -1,19 +1,15 @@
-#ifdef STM32F10X_HD_VL
 /**
   ******************************************************************************
-  * @file      startup_stm32f10x_hd_vl.s
+  * @file      startup_stm32f10x_ld_vl.s
   * @author    MCD Application Team
   * @version   V3.5.0
   * @date      11-March-2011
-  * @brief     STM32F10x High Density Value Line Devices vector table for Atollic 
-  *            toolchain.
+  * @brief     STM32F10x Low Density Value Line Devices vector table for Atollic toolchain.
   *            This module performs:
   *                - Set the initial SP
   *                - Set the initial PC == Reset_Handler,
   *                - Set the vector table entries with the exceptions ISR address
-  *                - Configure the clock system  
-  *                - Configure external SRAM mounted on STM32100E-EVAL board
-  *                  to be used as data memory (optional, to be enabled by user)   
+  *                - Configure the clock system   
   *                - Branches to main in the C library (which eventually
   *                  calls main()).
   *            After Reset the Cortex-M3 processor is in Thread mode,
@@ -94,11 +90,11 @@ LoopFillZerobss:
 	ldr	r3, = _ebss
 	cmp	r2, r3
 	bcc	FillZerobss
-	
+
 /* Call the clock system intitialization function.*/
-  bl  SystemInit 
+  bl  SystemInit  
 /* Call static constructors */
-  bl __libc_init_array  
+  bl __libc_init_array 
 /* Call the application's entry point.*/
 	bl	main
 	bx	lr
@@ -176,82 +172,77 @@ g_pfnVectors:
 	.word	TIM1_CC_IRQHandler
 	.word	TIM2_IRQHandler
 	.word	TIM3_IRQHandler
-	.word	TIM4_IRQHandler
+	.word	0
 	.word	I2C1_EV_IRQHandler
 	.word	I2C1_ER_IRQHandler
-	.word	I2C2_EV_IRQHandler
-	.word	I2C2_ER_IRQHandler
+	.word	0
+	.word	0
 	.word	SPI1_IRQHandler
-	.word	SPI2_IRQHandler
+	.word	0
 	.word	USART1_IRQHandler
 	.word	USART2_IRQHandler
-	.word	USART3_IRQHandler
+	.word	0
 	.word	EXTI15_10_IRQHandler
 	.word	RTCAlarm_IRQHandler
 	.word	CEC_IRQHandler
-  .word TIM12_IRQHandler
-  .word TIM13_IRQHandler
-  .word TIM14_IRQHandler
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word TIM5_IRQHandler
-  .word SPI3_IRQHandler
-  .word UART4_IRQHandler
-  .word UART5_IRQHandler
-  .word TIM6_DAC_IRQHandler
-  .word TIM7_IRQHandler  
-  .word DMA2_Channel1_IRQHandler
-  .word DMA2_Channel2_IRQHandler
-  .word DMA2_Channel3_IRQHandler
-  .word DMA2_Channel4_5_IRQHandler
-  .word DMA2_Channel5_IRQHandler
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word  BootRAM       /* @0x1E0. This is for boot in RAM mode for 
-                         STM32F10x High Density Value line devices. */
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word 0  
+	.word 0
+	.word 0
+	.word 0
+	.word TIM6_DAC_IRQHandler
+	.word TIM7_IRQHandler  
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word BootRAM          /* @0x01CC. This is for boot in RAM mode for 
+                            STM32F10x Medium Value Line Density devices. */
 
 /*******************************************************************************
 *
@@ -367,35 +358,20 @@ g_pfnVectors:
   .weak  TIM3_IRQHandler
   .thumb_set TIM3_IRQHandler,Default_Handler
 
-  .weak  TIM4_IRQHandler
-  .thumb_set TIM4_IRQHandler,Default_Handler
-
   .weak  I2C1_EV_IRQHandler
   .thumb_set I2C1_EV_IRQHandler,Default_Handler
 
   .weak  I2C1_ER_IRQHandler
   .thumb_set I2C1_ER_IRQHandler,Default_Handler
 
-  .weak  I2C2_EV_IRQHandler
-  .thumb_set I2C2_EV_IRQHandler,Default_Handler
-
-  .weak  I2C2_ER_IRQHandler
-  .thumb_set I2C2_ER_IRQHandler,Default_Handler
-
   .weak  SPI1_IRQHandler
   .thumb_set SPI1_IRQHandler,Default_Handler
-
-  .weak  SPI2_IRQHandler
-  .thumb_set SPI2_IRQHandler,Default_Handler
 
   .weak  USART1_IRQHandler
   .thumb_set USART1_IRQHandler,Default_Handler
 
   .weak  USART2_IRQHandler
   .thumb_set USART2_IRQHandler,Default_Handler
-
-  .weak  USART3_IRQHandler
-  .thumb_set USART3_IRQHandler,Default_Handler
 
   .weak  EXTI15_10_IRQHandler
   .thumb_set EXTI15_10_IRQHandler,Default_Handler
@@ -406,47 +382,11 @@ g_pfnVectors:
   .weak  CEC_IRQHandler
   .thumb_set CEC_IRQHandler,Default_Handler
 
-  .weak  TIM12_IRQHandler
-  .thumb_set TIM12_IRQHandler,Default_Handler
-
-  .weak  TIM13_IRQHandler
-  .thumb_set TIM13_IRQHandler,Default_Handler
-
-  .weak  TIM14_IRQHandler
-  .thumb_set TIM14_IRQHandler,Default_Handler
-
-  .weak  TIM5_IRQHandler
-  .thumb_set TIM5_IRQHandler,Default_Handler
-
-  .weak  SPI3_IRQHandler
-  .thumb_set SPI3_IRQHandler,Default_Handler
-
-  .weak  UART4_IRQHandler
-  .thumb_set UART4_IRQHandler,Default_Handler
-
-  .weak  UART5_IRQHandler
-  .thumb_set UART5_IRQHandler,Default_Handler
-  
   .weak  TIM6_DAC_IRQHandler
   .thumb_set TIM6_DAC_IRQHandler,Default_Handler
 
   .weak  TIM7_IRQHandler
-  .thumb_set TIM7_IRQHandler,Default_Handler 
+  .thumb_set TIM7_IRQHandler,Default_Handler  
 
-  .weak  DMA2_Channel1_IRQHandler
-  .thumb_set DMA2_Channel1_IRQHandler,Default_Handler
-
-  .weak  DMA2_Channel2_IRQHandler
-  .thumb_set DMA2_Channel2_IRQHandler,Default_Handler
-
-  .weak  DMA2_Channel3_IRQHandler
-  .thumb_set DMA2_Channel3_IRQHandler,Default_Handler
-
-  .weak  DMA2_Channel4_5_IRQHandler
-  .thumb_set DMA2_Channel4_5_IRQHandler,Default_Handler  
-
-  .weak  DMA2_Channel5_IRQHandler
-  .thumb_set DMA2_Channel5_IRQHandler,Default_Handler
-  
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
-#endif /* STM32F10X_HD_VL */
+

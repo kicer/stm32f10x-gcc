@@ -1,18 +1,17 @@
-#ifdef STM32F10X_HD
 /**
   ******************************************************************************
-  * @file      startup_stm32f10x_hd.s
+  * @file      startup_stm32f10x_cl.s
   * @author    MCD Application Team
   * @version   V3.5.0
   * @date      11-March-2011
-  * @brief     STM32F10x High Density Devices vector table for Atollic toolchain.
+  * @brief     STM32F10x Connectivity line Devices vector table for Atollic
+  *            toolchain.
   *            This module performs:
   *                - Set the initial SP
   *                - Set the initial PC == Reset_Handler,
-  *                - Set the vector table entries with the exceptions ISR address,
-  *                - Configure the clock system  
-  *                - Configure external SRAM mounted on STM3210E-EVAL board
-  *                  to be used as data memory (optional, to be enabled by user)
+  *                - Set the vector table entries with the exceptions ISR
+  *                  address.
+  *                - Configure the clock system
   *                - Branches to main in the C library (which eventually
   *                  calls main()).
   *            After Reset the Cortex-M3 processor is in Thread mode,
@@ -31,7 +30,7 @@
   ******************************************************************************
   */
 
-    .syntax unified
+  .syntax unified
 	.cpu cortex-m3
 	.fpu softvfp
 	.thumb
@@ -51,7 +50,7 @@ defined in linker script */
 /* end address for the .bss section. defined in linker script */
 .word	_ebss
 
-.equ  BootRAM,        0xF1E0F85F
+.equ  BootRAM, 0xF1E0F85F
 /**
  * @brief  This is the code that gets called when the processor first
  *          starts execution following a reset event. Only the absolutely
@@ -84,6 +83,7 @@ LoopCopyDataInit:
 	bcc	CopyDataInit
 	ldr	r2, =_sbss
 	b	LoopFillZerobss
+
 /* Zero fill the bss segment. */
 FillZerobss:
 	movs	r3, #0
@@ -95,7 +95,7 @@ LoopFillZerobss:
 	bcc	FillZerobss
 
 /* Call the clock system intitialization function.*/
-    bl  SystemInit
+  	bl  SystemInit
 /* Call static constructors */
     bl __libc_init_array
 /* Call the application's entry point.*/
@@ -116,6 +116,7 @@ Default_Handler:
 Infinite_Loop:
 	b	Infinite_Loop
 	.size	Default_Handler, .-Default_Handler
+
 /******************************************************************************
 *
 * The minimal vector table for a Cortex M3.  Note that the proper constructs
@@ -164,9 +165,9 @@ g_pfnVectors:
 	.word	DMA1_Channel6_IRQHandler
 	.word	DMA1_Channel7_IRQHandler
 	.word	ADC1_2_IRQHandler
-	.word	USB_HP_CAN1_TX_IRQHandler
-	.word	USB_LP_CAN1_RX0_IRQHandler
-	.word	CAN1_RX1_IRQHandler
+  .word CAN1_TX_IRQHandler
+  .word CAN1_RX0_IRQHandler
+ 	.word	CAN1_RX1_IRQHandler
 	.word	CAN1_SCE_IRQHandler
 	.word	EXTI9_5_IRQHandler
 	.word	TIM1_BRK_IRQHandler
@@ -187,70 +188,70 @@ g_pfnVectors:
 	.word	USART3_IRQHandler
 	.word	EXTI15_10_IRQHandler
 	.word	RTCAlarm_IRQHandler
-	.word	USBWakeUp_IRQHandler
-	.word	TIM8_BRK_IRQHandler
-	.word	TIM8_UP_IRQHandler
-	.word	TIM8_TRG_COM_IRQHandler
-	.word	TIM8_CC_IRQHandler
-	.word	ADC3_IRQHandler
-	.word	FSMC_IRQHandler
-	.word	SDIO_IRQHandler
-	.word	TIM5_IRQHandler
-	.word	SPI3_IRQHandler
-	.word	UART4_IRQHandler
-	.word	UART5_IRQHandler
-	.word	TIM6_IRQHandler
-	.word	TIM7_IRQHandler
-	.word	DMA2_Channel1_IRQHandler
-	.word	DMA2_Channel2_IRQHandler
-	.word	DMA2_Channel3_IRQHandler
-	.word	DMA2_Channel4_5_IRQHandler
+	.word	OTG_FS_WKUP_IRQHandler
+  .word	0
 	.word	0
 	.word	0
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	BootRAM       /* @0x1E0. This is for boot in RAM mode for
-                         STM32F10x High Density devices. */
+	.word TIM5_IRQHandler
+  .word SPI3_IRQHandler
+  .word UART4_IRQHandler
+  .word UART5_IRQHandler
+  .word TIM6_IRQHandler
+  .word TIM7_IRQHandler
+  .word DMA2_Channel1_IRQHandler
+  .word DMA2_Channel2_IRQHandler
+  .word DMA2_Channel3_IRQHandler
+  .word DMA2_Channel4_IRQHandler
+  .word DMA2_Channel5_IRQHandler
+  .word ETH_IRQHandler
+  .word ETH_WKUP_IRQHandler
+  .word CAN2_TX_IRQHandler
+  .word CAN2_RX0_IRQHandler
+  .word CAN2_RX1_IRQHandler
+  .word CAN2_SCE_IRQHandler
+  .word OTG_FS_IRQHandler
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word 0
+  .word BootRAM     /* @0x1E0. This is for boot in RAM mode for
+                         STM32F10x Connectivity line Devices. */
 
 /*******************************************************************************
 *
@@ -259,7 +260,6 @@ g_pfnVectors:
 * this definition.
 *
 *******************************************************************************/
-
   .weak	NMI_Handler
 	.thumb_set NMI_Handler,Default_Handler
 
@@ -344,11 +344,11 @@ g_pfnVectors:
 	.weak	ADC1_2_IRQHandler
 	.thumb_set ADC1_2_IRQHandler,Default_Handler
 
-	.weak	USB_HP_CAN1_TX_IRQHandler
-	.thumb_set USB_HP_CAN1_TX_IRQHandler,Default_Handler
+	.weak	CAN1_TX_IRQHandler
+	.thumb_set CAN1_TX_IRQHandler,Default_Handler
 
-	.weak	USB_LP_CAN1_RX0_IRQHandler
-	.thumb_set USB_LP_CAN1_RX0_IRQHandler,Default_Handler
+	.weak	CAN1_RX0_IRQHandler
+	.thumb_set CAN1_RX0_IRQHandler,Default_Handler
 
 	.weak	CAN1_RX1_IRQHandler
 	.thumb_set CAN1_RX1_IRQHandler,Default_Handler
@@ -413,29 +413,8 @@ g_pfnVectors:
 	.weak	RTCAlarm_IRQHandler
 	.thumb_set RTCAlarm_IRQHandler,Default_Handler
 
-	.weak	USBWakeUp_IRQHandler
-	.thumb_set USBWakeUp_IRQHandler,Default_Handler
-
-	.weak	TIM8_BRK_IRQHandler
-	.thumb_set TIM8_BRK_IRQHandler,Default_Handler
-
-	.weak	TIM8_UP_IRQHandler
-	.thumb_set TIM8_UP_IRQHandler,Default_Handler
-
-	.weak	TIM8_TRG_COM_IRQHandler
-	.thumb_set TIM8_TRG_COM_IRQHandler,Default_Handler
-
-	.weak	TIM8_CC_IRQHandler
-	.thumb_set TIM8_CC_IRQHandler,Default_Handler
-
-	.weak	ADC3_IRQHandler
-	.thumb_set ADC3_IRQHandler,Default_Handler
-
-	.weak	FSMC_IRQHandler
-	.thumb_set FSMC_IRQHandler,Default_Handler
-
-	.weak	SDIO_IRQHandler
-	.thumb_set SDIO_IRQHandler,Default_Handler
+	.weak	OTG_FS_WKUP_IRQHandler
+	.thumb_set OTG_FS_WKUP_IRQHandler,Default_Handler
 
 	.weak	TIM5_IRQHandler
 	.thumb_set TIM5_IRQHandler,Default_Handler
@@ -464,8 +443,31 @@ g_pfnVectors:
 	.weak	DMA2_Channel3_IRQHandler
 	.thumb_set DMA2_Channel3_IRQHandler,Default_Handler
 
-	.weak	DMA2_Channel4_5_IRQHandler
-	.thumb_set DMA2_Channel4_5_IRQHandler,Default_Handler
+	.weak	DMA2_Channel4_IRQHandler
+	.thumb_set DMA2_Channel4_IRQHandler,Default_Handler
+
+	.weak	DMA2_Channel5_IRQHandler
+	.thumb_set DMA2_Channel5_IRQHandler,Default_Handler
+
+	.weak	ETH_IRQHandler
+	.thumb_set ETH_IRQHandler,Default_Handler
+
+	.weak	ETH_WKUP_IRQHandler
+	.thumb_set ETH_WKUP_IRQHandler,Default_Handler
+
+	.weak	CAN2_TX_IRQHandler
+	.thumb_set CAN2_TX_IRQHandler,Default_Handler
+
+	.weak	CAN2_RX0_IRQHandler
+	.thumb_set CAN2_RX0_IRQHandler,Default_Handler
+
+	.weak	CAN2_RX1_IRQHandler
+	.thumb_set CAN2_RX1_IRQHandler,Default_Handler
+
+	.weak	CAN2_SCE_IRQHandler
+	.thumb_set CAN2_SCE_IRQHandler,Default_Handler
+
+	.weak	OTG_FS_IRQHandler
+	.thumb_set OTG_FS_IRQHandler ,Default_Handler
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
-#endif /* STM32F10X_HD */

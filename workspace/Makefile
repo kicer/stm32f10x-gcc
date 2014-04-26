@@ -20,7 +20,6 @@ STM32_LIB_NAME = kstm32
 STM32_LIB_FILE = $(WORKSPACE_DIR)/lib/lib$(STM32_LIB_NAME).a
 
 STM32_STARTUP_OBJ = $(patsubst %.S,%.o,$(wildcard $(WORKSPACE_DIR)/startup/*.S))
-STM32_STARTUP_OBJ += $(patsubst %.s,%.o,$(wildcard $(WORKSPACE_DIR)/startup/*.s))
 
 CFLAGS += -D$(DEVICE) -DHSE_VALUE=$(OSC)
 CFLAGS += $(addprefix -I,$(STM32_LIB_INCS)) -I$(WORKSPACE_DIR)/inc

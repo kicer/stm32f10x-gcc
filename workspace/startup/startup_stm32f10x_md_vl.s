@@ -1,4 +1,3 @@
-#ifdef STM32F10X_MD_VL
 /**
   ******************************************************************************
   * @file      startup_stm32f10x_md_vl.s
@@ -406,4 +405,4 @@ g_pfnVectors:
   .thumb_set TIM7_IRQHandler,Default_Handler  
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
-#endif /* STM32F10X_MD_VL */
+

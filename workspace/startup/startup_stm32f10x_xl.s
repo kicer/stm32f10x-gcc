@@ -1,4 +1,3 @@
-#ifdef STM32F10X_XL
 /**
   ******************************************************************************
   * @file      startup_stm32f10x_xl.s
@@ -466,4 +465,3 @@ g_pfnVectors:
   .thumb_set DMA2_Channel4_5_IRQHandler,Default_Handler
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
-#endif /* STM32F10X_XL */
